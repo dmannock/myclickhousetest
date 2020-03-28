@@ -1,0 +1,2 @@
+# use ps, cba with more yak shaving
+winpty docker run -it --rm --link some-clickhouse-server:clickhouse-server yandex/clickhouse-client --host some-clickhouse-server --query "SELECT count(*) from datasets.ontime" > query_all_count_datasets.ontime.txt
