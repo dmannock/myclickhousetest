@@ -14,9 +14,9 @@ class Program
         private const string username = "default";
         private const string password = "";
         private const string database = "datasets";
-        private const string tableName = "ontime";
-        private const string ConnectionString = 
-            $"Compress=True;CheckCompressedHash=False;Compressor=lz4;Host={host};Port={port};User={username};Password={password};SocketTimeout=600000;Database={datasets};";
+        private const string tableName = "events";
+        private static readonly string ConnectionString = 
+            $"Compress=True;CheckCompressedHash=False;Compressor=lz4;Host={host};Port={port};User={username};Password={password};SocketTimeout=600000;Database={database};";
 
         static void Main(string[] args)
         {
