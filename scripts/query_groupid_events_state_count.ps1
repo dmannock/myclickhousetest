@@ -12,3 +12,27 @@ $query = "SELECT State, Count(State) FROM (
 $res = docker run -it --rm --link some-clickhouse-server:clickhouse-server yandex/clickhouse-client --host some-clickhouse-server -t --query $query
 $res > query_groupid_events_state_count_datasets.events.txt
 Write-Output $res
+
+# version for aggregated views
+# SELECT
+#     GroupId,
+#     countIf(State = 'created') as CreatedCount,
+#     countIf(State = 'requested') as RequestedCount,
+#     countIf(State = 'received') as ReceivedCount, 
+#     countIf(State = 'approved') as AapprovedCount,
+#     max(OccuredAt) as LastOccuredAt
+# FROM
+# (
+#     SELECT
+#         State,
+#         GroupId,
+#         OccuredAt
+#     FROM datasets.events
+#     WHERE GroupId = 'cbb0dff4-8934-4cad-af8b-5dc74aa5a8f4'
+#     GROUP BY
+#         Uid,
+#         State,
+#         GroupId,
+#         OccuredAt
+# )
+# GROUP BY GroupId

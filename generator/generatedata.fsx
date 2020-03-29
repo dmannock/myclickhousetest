@@ -15,10 +15,108 @@
 // 	),
 // 	`Errors` Array(String),
 // 	`OccuredAt` DateTime,
-// 	`InsertedAt` DateTime
+// 	`InsertedAt` DateTime DEFAULT now()
 //  ) ENGINE = MergeTree()
 //  PARTITION BY toYYYYMM(OccuredAt)
 //  ORDER BY (OccuredAt, GroupId, Uid);
+
+// CREATE TABLE datasets.current_event_state (
+//     `GroupId` UUID,
+//     `CreatedCount` UInt64,
+//     `RequestedCount` UInt64,
+//     `ReceivedCount` UInt64,
+//     `ApprovedCount` UInt64,
+//     `RejectedCount` UInt64,
+//     `LastOccuredAt` DateTime
+//  ) ENGINE = SummingMergeTree()
+//  PARTITION BY toYYYYMM(LastOccuredAt)
+//  ORDER BY (GroupId, LastOccuredAt);
+
+// CREATE MATERIALIZED VIEW datasets.current_event_state_mv
+// TO current_event_state
+// AS SELECT
+//     GroupId,
+//     countIf(State = 'created') as CreatedCount,
+//     countIf(State = 'requested') as RequestedCount,
+//     countIf(State = 'received') as ReceivedCount, 
+//     countIf(State = 'approved') as ApprovedCount,
+//     max(OccuredAt) as LastOccuredAt
+// FROM (
+//     SELECT
+//         State,
+//         GroupId,
+//         OccuredAt
+//     FROM datasets.events
+//     GROUP BY
+//         Uid,
+//         State,
+//         GroupId,
+//         OccuredAt
+// )
+// GROUP BY GroupId
+
+//manually load old data
+//normally have date constraint up to the point currently processing data is arriving
+//NOTE: STILL CRASHES SERVER IN CONTAINER IF DATA > ~20million
+// INSERT INTO current_event_state
+// SELECT
+//     GroupId,
+//     countIf(State = 'created') as CreatedCount,
+//     countIf(State = 'requested') as RequestedCount,
+//     countIf(State = 'received') as ReceivedCount, 
+//     countIf(State = 'approved') as ApprovedCount,
+//     max(OccuredAt) as LastOccuredAt
+// FROM (
+//     SELECT
+//         State,
+//         GroupId,
+//         OccuredAt
+//     FROM datasets.events
+//     GROUP BY
+//         Uid,
+//         State,
+//         GroupId,
+//         OccuredAt
+// )
+// GROUP BY GroupId
+
+//query from view for group
+// SELECT
+//     GroupId,
+//     CreatedCount,
+//     RequestedCount,
+//     ReceivedCount, 
+//     ApprovedCount,
+//     LastOccuredAt
+// FROM current_event_state
+// WHERE GroupId = 'cbb0dff4-8934-4cad-af8b-5dc74aa5a8f4'
+
+//query aggregated summary
+// SELECT
+//     sum(CreatedCount),
+//     sum(RequestedCount),
+//     sum(ReceivedCount), 
+//     sum(ApprovedCount),
+// FROM current_event_state
+
+// similar perf as orig
+// CREATE TABLE datasets.events_v2 (
+// 	`Uid` UUID,
+// 	`GroupId` UUID,
+// 	`Reference` String,
+// 	`State` Enum(
+// 		'created' = 1,
+// 		'requested' = 2,
+// 		'received' = 3,
+// 		'approved' = 4,
+// 		'rejected' = 5
+// 	),
+// 	`Errors` Array(String),
+// 	`OccuredAt` DateTime,
+// 	`InsertedAt` DateTime
+//  ) ENGINE = MergeTree()
+//  PARTITION BY toYYYYMM(OccuredAt)
+//  ORDER BY (GroupId, Uid, toDate(OccuredAt));
 
 // csv output:  Uid, GroupId, Reference, State, Errors, OccuredAt, InsertedAt
 // as example insert:
