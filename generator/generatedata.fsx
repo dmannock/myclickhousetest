@@ -1,3 +1,7 @@
+//config
+let numberOfIds = 10_000_00
+let numberOfGroups = 100
+let outputFile = "gendata.csv"
 // Notes: insert perf may be affected since generated data is not sorted by date
 // TODO: generation perf could be optimised, not needed yet
 
@@ -123,10 +127,6 @@
 // INSERT INTO datasets.events VALUES('86218b86-f8ac-44d6-84ec-e8a0a65bc41a','410578df-9c6c-4b17-82c1-6f648b070795',0,'created',[],toDateTime('2010/03/28 13:42:56'),toDateTime('2020/03/28 13:42:56'));
 open System
 open System.IO
-//config
-let numberOfIds = 10_000_00
-let numberOfGroups = 100
-let outputFile = "gendata.csv"
 let occuredAtEnd = DateTime.UtcNow
 let occuredAtStart = occuredAtEnd.AddYears(-10)
 //Note: stored as enum - normalise to lowercase
