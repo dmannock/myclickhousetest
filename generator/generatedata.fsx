@@ -16,11 +16,8 @@ let genGroups n = Array.init n (fun _ -> Guid.NewGuid())
 
 let selectRandomItem gs = Array.item (rnd.Next(gs |> Array.length)) gs
 
-let getPrevousStates state = Array.takeWhile (fun s -> s <> state)
-
 let genRandomStateIncludingPrevious states = 
-    let randState = selectRandomItem states
-    Array.append (getPrevousStates randState states) [|randState|]
+    states |> Array.take (states |> Array.length |> rnd.Next)
 
 //good enough, head = min date e.g. zero randomness
 let genConsecutiveDatesBetween (min: DateTime) (max: DateTime) num =
