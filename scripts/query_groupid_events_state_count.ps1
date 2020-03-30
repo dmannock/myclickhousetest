@@ -19,20 +19,21 @@ Write-Output $res
 #     countIf(State = 'created') as CreatedCount,
 #     countIf(State = 'requested') as RequestedCount,
 #     countIf(State = 'received') as ReceivedCount, 
-#     countIf(State = 'approved') as AapprovedCount,
-#     max(OccuredAt) as LastOccuredAt
+#     countIf(State = 'approved') as ApprovedCount,
+#     countIf(State = 'rejected') as RejectedCount,
+#     max(OccurredAt) as LastOccurredAt
 # FROM
 # (
 #     SELECT
 #         State,
 #         GroupId,
-#         OccuredAt
+#         OccurredAt
 #     FROM datasets.events
 #     WHERE GroupId = 'cbb0dff4-8934-4cad-af8b-5dc74aa5a8f4'
 #     GROUP BY
+#         GroupId,
 #         Uid,
 #         State,
-#         GroupId,
-#         OccuredAt
+#         OccurredAt
 # )
 # GROUP BY GroupId

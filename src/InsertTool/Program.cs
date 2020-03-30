@@ -50,11 +50,11 @@ namespace InsertTool
                         Reference = "Test" + Guid.NewGuid(),
                         State = State.created,
                         Errors = Enumerable.Empty<string>().ToList(),
-                        OccuredAt = DateTime.UtcNow,
+                        OccurredAt = DateTime.UtcNow,
                         InsertedAt = DateTime.UtcNow,
                     };
 
-                    var cols = new[] { "Uid","GroupId","Reference","State","Errors","OccuredAt","InsertedAt" };
+                    var cols = new[] { "Uid","GroupId","Reference","State","Errors","OccurredAt","InsertedAt" };
                     var bulkdata = new[] { data };
 
                     db.BulkInsert(tableName, cols, bulkdata);
@@ -69,7 +69,7 @@ namespace InsertTool
             public String Reference;
             public State State;
             public List<String> Errors;
-            public DateTime OccuredAt;
+            public DateTime OccurredAt;
             public DateTime InsertedAt;
         }
 
