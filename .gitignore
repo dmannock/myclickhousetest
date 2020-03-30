@@ -303,7 +303,8 @@ _Pvt_Extensions
 paket-files/
 
 # FAKE - F# Make
-.fake/
+.fake
+.ionide
 
 # CodeRush personal settings
 .cr/personal

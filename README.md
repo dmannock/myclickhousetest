@@ -261,4 +261,4 @@ ows/s., 219.37 MB/s.)
 
 ## Notes
 - Insert perf may be affected since generated data is not sorted by date
-- TODO: generation perf could be optimised, not needed yet
+- TODO: generation perf could be optimised, also not taking advantage of multiple cores, not needed yet
